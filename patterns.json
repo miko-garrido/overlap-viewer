@@ -3,36 +3,42 @@
       "name": "Meg",
       "timezone": "Asia/Manila",
       "pattern": "5pm-1am",
-      "days": "M,Tu,W,Th,F"
+      "days": "M,Tu,W,Th,F",
+      "teams": ["core", "ops"]
     },
     {
       "name": "Miko",
       "timezone": "Asia/Manila",
       "pattern": "7pm-8am",
-      "days": "M,Tu,W,Th,F"
+      "days": "M,Tu,W,Th,F",
+      "teams": ["core"]
     },
     {
       "name": "Josh",
       "timezone": "Asia/Manila",
       "pattern": "4pm-5am",
-      "days": "M,Tu,W,Th,F"
+      "days": "M,Tu,W,Th,F",
+      "teams": ["core", "projects"]
     },
     {
       "name": "RJ",
       "timezone": "Asia/Manila",
       "pattern": "9pm-12am, 2pm-6pm",
-      "days": "M,Tu,W,Th,F"
+      "days": "M,Tu,W,Th,F",
+      "teams": ["core", "projects"]
     },
     {
       "name": "Kai",
       "timezone": "Asia/Manila",
       "pattern": "9pm-5am",
-      "days": "M,Tu,W,Th,F"
+      "days": "M,Tu,W,Th,F",
+      "teams": ["core", "projects"]
     },
     {
       "name": "Lucca",
       "timezone": "Asia/Manila",
       "pattern": "9pm-5am",
-      "days": "M,Tu,W,Th,F"
+      "days": "M,Tu,W,Th,F",
+      "teams": ["core", "design"]
     }
   ]
