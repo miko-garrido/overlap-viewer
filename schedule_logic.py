@@ -25,6 +25,9 @@ def convert_time_to_timezone(time_obj, source_tz, target_tz, base_date=None):
     return target_dt.time(), target_dt.date()
 
 def parse_time_range(rng):
+    rng = rng.strip()
+    if '-' not in rng:
+        raise ValueError(f"Invalid time range format: '{rng}' (expected format: 'start-end')")
     start_str, end_str = rng.split('-')
     start = parse_time(start_str)
     end = parse_time(end_str)
@@ -45,8 +48,15 @@ def add_block(grid, day, start, end):
             grid[(day+1)%7, h] = 1
 
 def parse_pattern(pattern, days, source_timezone, display_timezone):
+    # Handle empty or whitespace-only patterns, or 'nan' string
+    if not pattern or not pattern.strip() or pattern.strip().lower() == 'nan':
+        return np.zeros((7, 24))
+    
     grid = np.zeros((7, 24))
     for rng in pattern.split(','):
+        rng = rng.strip()  # Clean whitespace around ranges
+        if not rng or rng.lower() == 'nan':  # Skip empty ranges or 'nan'
+            continue
         start, end = parse_time_range(rng)
         
         # Convert times to display timezone
