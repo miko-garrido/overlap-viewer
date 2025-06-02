@@ -7,14 +7,16 @@ with open('patterns.json') as f:
     patterns = json.load(f)
 
 sched_grids = build_schedule_grids(patterns)
-day = st.selectbox('Select day', DAYS)
+day = st.sidebar.selectbox('Select day', DAYS)
 day_idx = DAYS.index(day)
 hours = [f'{h:02}:00' for h in range(24)]
+names = list(sched_grids.keys())
+selected_names = st.sidebar.multiselect('Select names', names, default=names)
 table = []
 for h in range(24):
-    row = [int(sched_grids[name][day_idx, h]) for name in sched_grids]
+    row = [int(sched_grids[name][day_idx, h]) for name in selected_names]
     table.append(row)
-df = pd.DataFrame(table, columns=list(sched_grids.keys()), index=hours)
+df = pd.DataFrame(table, columns=selected_names, index=hours)
 def highlight(val):
     color = '#7fc97f' if val else ''
     return f'background-color: {color}'

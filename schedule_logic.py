@@ -39,4 +39,4 @@ def parse_pattern(pattern, days):
     return grid
 
 def build_schedule_grids(patterns):
-    return {name: parse_pattern(info['pattern'], info['days']) for name, info in patterns.items()} 
+    return {entry['name']: parse_pattern(entry['pattern'], entry['days']) for entry in patterns} 
