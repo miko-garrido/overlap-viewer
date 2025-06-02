@@ -1,0 +1,7 @@
+{
+  "RJ": {"timezone": "Asia/Manila", "pattern": "2pm-5pm, 9pm-1am", "days": "M,Tu,W,Th,F"},
+  "Kai": {"timezone": "Asia/Manila", "pattern": "12am-5am", "days": "M,Tu,W,Th,F"},
+  "Lucca": {"timezone": "Asia/Manila", "pattern": "12am-5am, 7pm-12am", "days": "M,Tu,W,Th,F"},
+  "Miko": {"timezone": "Asia/Manila", "pattern": "5am-8am, 6pm-9pm", "days": "M,Tu,W,Th,F"},
+  "Jeff": {"timezone": "Asia/Manila", "pattern": "5am-8am, 6pm-9pm", "days": "M,Tu,W,Th,F"}
+} 
