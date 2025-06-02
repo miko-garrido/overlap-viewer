@@ -10,13 +10,14 @@ from schedule_logic import DAYS, build_schedule_grids
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Google Sheets URL - replace with your sheet ID
-SHEET_URL = "https://docs.google.com/spreadsheets/d/1u2wKp756BwFvE3ZeLgurpRX-yVt1wSrSTbV65b7o-_o/export?format=csv&gid=0"
+SHEET_URL = "https://docs.google.com/spreadsheets/d/1u2wKp756BwFvE3ZeLgurpRX-yVt1wSrSTbV65b7o-_o/export?format=csv"
 
 def load_data():
     """Load and process schedule patterns from Google Sheets."""
     try:
-        # Use requests with SSL verification disabled as fallback
-        response = requests.get(SHEET_URL, verify=False)
+        # Use requests with follow redirects and proper headers
+        headers = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'}
+        response = requests.get(SHEET_URL, verify=False, headers=headers, allow_redirects=True)
         response.raise_for_status()
         
         # Read CSV from response content
@@ -51,6 +52,7 @@ def load_data():
         return patterns
     except Exception as e:
         st.error(f"Error loading data from Google Sheets: {e}")
+        st.info("Make sure your Google Sheet is shared publicly (Anyone with link can view)")
         # Fallback to local JSON if available
         try:
             with open('patterns.json') as f:
