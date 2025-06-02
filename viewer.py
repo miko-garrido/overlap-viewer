@@ -11,6 +11,9 @@ display_timezone = st.sidebar.selectbox('Display timezone', timezones, index=1)
 
 sched_grids = build_schedule_grids(patterns, display_timezone)
 
+day = st.sidebar.selectbox('Select day', DAYS)
+day_idx = DAYS.index(day)
+
 # Get all unique teams
 all_teams = set()
 for entry in patterns:
@@ -22,8 +25,6 @@ selected_teams = st.sidebar.multiselect('Select teams', all_teams, default=[])
 # Filter patterns by selected teams
 filtered_by_teams = [p['name'] for p in patterns if any(team in selected_teams for team in p.get('teams', []))]
 
-day = st.sidebar.selectbox('Select day', DAYS)
-day_idx = DAYS.index(day)
 hours = [f'{h:02}:00' for h in range(24)]
 names = list(sched_grids.keys())
 selected_names = st.sidebar.multiselect('Select names', names, default=[])
