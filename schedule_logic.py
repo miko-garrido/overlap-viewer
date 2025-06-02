@@ -72,6 +72,24 @@ def parse_pattern(pattern, days, source_timezone, display_timezone):
     return grid
 
 def build_schedule_grids(patterns, display_timezone='Asia/Manila'):
-    return {entry['name']: parse_pattern(entry['pattern'], entry['days'], 
-                                       entry['timezone'], display_timezone) 
-            for entry in patterns} 
+    # Group entries by name to handle multiple patterns per person
+    grouped_patterns = {}
+    for entry in patterns:
+        name = entry['name']
+        if name not in grouped_patterns:
+            grouped_patterns[name] = []
+        grouped_patterns[name].append(entry)
+    
+    result = {}
+    for name, entries in grouped_patterns.items():
+        combined_grid = np.zeros((7, 24))
+        
+        for entry in entries:
+            pattern_grid = parse_pattern(entry['pattern'], entry['days'], 
+                                       entry['timezone'], display_timezone)
+            # Add this pattern to the combined grid
+            combined_grid = np.maximum(combined_grid, pattern_grid)
+        
+        result[name] = combined_grid
+    
+    return result 
