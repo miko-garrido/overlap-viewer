@@ -49,15 +49,17 @@ display_df = pd.DataFrame('', index=df.index, columns=df.columns)
 
 def style_cells(df):
     def apply_style(val, row_idx, col_idx):
+        if val == 0:
+            return ''  # No background for empty cells
+        
         hour = row_idx  # row_idx corresponds to hour (0-23)
-        # Base colors for different time periods
-        if 8 <= hour <= 16:  # 8am to 5pm
-            base_color = '#f8f9fa' if val == 0 else '#c8e6c9'
-        elif 17 <= hour <= 19:  # 5pm to 8pm
-            base_color = '#e9ecef' if val == 0 else '#a5d6a7'
-        else:  # 8pm to 8am
-            base_color = '#d6d8db' if val == 0 else '#94c497'
-        return f'background-color: {base_color}'
+        # Different shades of green based on time periods
+        if 8 <= hour <= 16:  # 8am to 5pm - standard green
+            return 'background-color: #81c784'
+        elif 17 <= hour <= 19:  # 5pm to 8pm - slightly darker green
+            return 'background-color: #66bb6a'
+        else:  # 8pm to 8am - darker green
+            return 'background-color: #4caf50'
     
     styled = pd.DataFrame('', index=df.index, columns=df.columns)
     for i, row_idx in enumerate(df.index):
