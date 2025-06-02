@@ -10,16 +10,39 @@ timezones = ['Asia/Manila', 'America/New_York', 'America/Los_Angeles', 'Australi
 display_timezone = st.sidebar.selectbox('Display timezone', timezones, index=1)
 
 sched_grids = build_schedule_grids(patterns, display_timezone)
+
+# Get all unique teams
+all_teams = set()
+for entry in patterns:
+    all_teams.update(entry.get('teams', []))
+all_teams = sorted(list(all_teams))
+
+selected_teams = st.sidebar.multiselect('Select teams', all_teams, default=[])
+
+# Filter patterns by selected teams
+filtered_by_teams = [p['name'] for p in patterns if any(team in selected_teams for team in p.get('teams', []))]
+
 day = st.sidebar.selectbox('Select day', DAYS)
 day_idx = DAYS.index(day)
 hours = [f'{h:02}:00' for h in range(24)]
 names = list(sched_grids.keys())
-selected_names = st.sidebar.multiselect('Select names', names, default=names)
+selected_names = st.sidebar.multiselect('Select names', names, default=[])
+
+# Combine filters: show union of team members and selected names
+if not selected_teams and not selected_names:
+    # No filters selected, show everyone
+    final_names = names
+else:
+    # Show union of team filters and name filters
+    final_names = list(set(filtered_by_teams + selected_names))
+    # Keep only names that exist in the schedule
+    final_names = [name for name in final_names if name in names]
+
 table = []
 for h in range(24):
-    row = [int(sched_grids[name][day_idx, h]) for name in selected_names]
+    row = [int(sched_grids[name][day_idx, h]) for name in final_names]
     table.append(row)
-df = pd.DataFrame(table, columns=selected_names, index=hours)
+df = pd.DataFrame(table, columns=final_names, index=hours)
 
 # Create display dataframe with empty strings
 display_df = pd.DataFrame('', index=df.index, columns=df.columns)
