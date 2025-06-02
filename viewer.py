@@ -1,13 +1,62 @@
 import streamlit as st
 import pandas as pd
 import json
+import requests
+import ssl
+import urllib3
 from schedule_logic import DAYS, build_schedule_grids
 
+# Disable SSL warnings
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
+# Google Sheets URL - replace with your sheet ID
+SHEET_URL = "https://docs.google.com/spreadsheets/d/1u2wKp756BwFvE3ZeLgurpRX-yVt1wSrSTbV65b7o-_o/export?format=csv&gid=0"
+
 def load_data():
-    """Load and process schedule patterns."""
-    with open('patterns.json') as f:
-        patterns = json.load(f)
-    return patterns
+    """Load and process schedule patterns from Google Sheets."""
+    try:
+        # Use requests with SSL verification disabled as fallback
+        response = requests.get(SHEET_URL, verify=False)
+        response.raise_for_status()
+        
+        # Read CSV from response content
+        from io import StringIO
+        df = pd.read_csv(StringIO(response.text))
+        
+        # Convert DataFrame to the expected JSON structure
+        patterns = []
+        for _, row in df.iterrows():
+            # Handle potential column name variations and strip whitespace
+            name = str(row.get("name", row.get("Name", ""))).strip()
+            timezone = str(row.get("timezone", row.get("Timezone", "Asia/Manila"))).strip()
+            pattern = str(row.get("pattern", row.get("Pattern", ""))).strip()
+            days = str(row.get("days", row.get("Days", "M,Tu,W,Th,F"))).strip()
+            teams_str = str(row.get("teams", row.get("Teams", ""))).strip()
+            
+            # Skip rows with empty names
+            if not name or name == "nan":
+                continue
+                
+            teams = [t.strip() for t in teams_str.split(",") if t.strip() and t.strip() != "nan"]
+            
+            pattern_dict = {
+                "name": name,
+                "timezone": timezone, 
+                "pattern": pattern,
+                "days": days,
+                "teams": teams
+            }
+            patterns.append(pattern_dict)
+        
+        return patterns
+    except Exception as e:
+        st.error(f"Error loading data from Google Sheets: {e}")
+        # Fallback to local JSON if available
+        try:
+            with open('patterns.json') as f:
+                return json.load(f)
+        except:
+            return []
 
 def create_sidebar_controls(patterns):
     """Create all sidebar controls and return their values."""

@@ -1,3 +1,5 @@
 matplotlib
 numpy
-streamlit 
+streamlit
+pandas
+requests 
