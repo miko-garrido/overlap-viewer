@@ -1,7 +1,38 @@
-{
-  "RJ": {"timezone": "Asia/Manila", "pattern": "2pm-5pm, 9pm-1am", "days": "M,Tu,W,Th,F"},
-  "Kai": {"timezone": "Asia/Manila", "pattern": "12am-5am", "days": "M,Tu,W,Th,F"},
-  "Lucca": {"timezone": "Asia/Manila", "pattern": "12am-5am, 7pm-12am", "days": "M,Tu,W,Th,F"},
-  "Miko": {"timezone": "Asia/Manila", "pattern": "5am-8am, 6pm-9pm", "days": "M,Tu,W,Th,F"},
-  "Jeff": {"timezone": "Asia/Manila", "pattern": "5am-8am, 6pm-9pm", "days": "M,Tu,W,Th,F"}
-} 
+[
+    {
+      "name": "Meg",
+      "timezone": "Asia/Manila",
+      "pattern": "12am-2am, 6pm-12am",
+      "days": "M,Tu,W,Th,F"
+    },
+    {
+      "name": "Miko",
+      "timezone": "Asia/Manila",
+      "pattern": "1am-8am, 8pm-12am",
+      "days": "M,Tu,W,Th,F"
+    },
+    {
+      "name": "Josh",
+      "timezone": "Asia/Manila",
+      "pattern": "12am-7am, 7pm-12am",
+      "days": "M,Tu,W,Th,F"
+    },
+    {
+      "name": "RJ",
+      "timezone": "Asia/Manila",
+      "pattern": "12am-1am, 2pm-5pm",
+      "days": "M,Tu,W,Th,F"
+    },
+    {
+      "name": "Kai",
+      "timezone": "Asia/Manila",
+      "pattern": "12am-5am",
+      "days": "M,Tu,W,Th,F"
+    },
+    {
+      "name": "Lucca",
+      "timezone": "Asia/Manila",
+      "pattern": "12am-6am, 8pm-12am",
+      "days": "M,Tu,W,Th,F"
+    }
+  ]
