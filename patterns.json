@@ -40,5 +40,12 @@
       "pattern": "9pm-5am",
       "days": "M,Tu,W,Th,F",
       "teams": ["core", "design"]
-    }
+    },
+    {
+        "name": "Lucca",
+        "timezone": "Asia/Manila",
+        "pattern": "9pm-5am",
+        "days": "M,Tu,W,Th,F",
+        "teams": ["core", "design"]
+      }
   ]

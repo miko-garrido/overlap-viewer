@@ -3,6 +3,17 @@ import pandas as pd
 import json
 from schedule_logic import DAYS, build_schedule_grids
 
+st.set_page_config(layout="wide")
+
+# Remove excess padding
+st.markdown("""
+<style>
+.block-container {
+    padding-bottom: 0rem;
+}
+</style>
+""", unsafe_allow_html=True)
+
 with open('patterns.json') as f:
     patterns = json.load(f)
 
@@ -69,4 +80,5 @@ def style_cells(df):
     return styled
 
 styled_df = display_df.style.apply(lambda _: style_cells(df), axis=None)
-st.dataframe(styled_df, height=700) 
+
+st.dataframe(styled_df, height=750, use_container_width=True) 
