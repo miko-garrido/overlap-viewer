@@ -6,7 +6,10 @@ from schedule_logic import DAYS, build_schedule_grids
 with open('patterns.json') as f:
     patterns = json.load(f)
 
-sched_grids = build_schedule_grids(patterns)
+timezones = ['Asia/Manila', 'America/New_York', 'America/Los_Angeles', 'Australia/Sydney', 'Europe/London']
+display_timezone = st.sidebar.selectbox('Display timezone', timezones, index=0)
+
+sched_grids = build_schedule_grids(patterns, display_timezone)
 day = st.sidebar.selectbox('Select day', DAYS)
 day_idx = DAYS.index(day)
 hours = [f'{h:02}:00' for h in range(24)]
