@@ -1,6 +1,8 @@
 import re
 from datetime import datetime
 import numpy as np
+import streamlit as st
+import pandas as pd
 
 DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
 DAY_IDX = {'M':0, 'Tu':1, 'W':2, 'Th':3, 'F':4, 'Sa':5, 'Su':6}
@@ -40,38 +42,8 @@ def parse_pattern(pattern, days):
             add_block(grid, day, start, end)
     return grid
 
-def grid_to_html(name, grid):
-    html = f'<h2>{name}</h2>'
-    html += '<table class="sched"><tr><th></th>'
-    for h in range(24):
-        html += f'<th>{h}</th>'
-    html += '</tr>'
-    for d, day in enumerate(DAYS):
-        html += f'<tr><td>{day}</td>'
-        for h in range(24):
-            cell = 'busy' if grid[d, h] else ''
-            html += f'<td class="{cell}"></td>'
-        html += '</tr>'
-    html += '</table>'
-    return html
-
-def write_html(schedules):
-    style = '''<style>
-table.sched { border-collapse: collapse; margin-bottom: 30px; }
-table.sched th, table.sched td { border: 1px solid #ccc; width: 20px; height: 20px; text-align: center; }
-table.sched td.busy { background: #7fc97f; }
-table.sched th { background: #eee; }
-table.sched td:first-child, table.sched th:first-child { background: #fff; }
-</style>'''
-    html = f'<!DOCTYPE html><html><head><meta charset="utf-8"><title>Schedule Overlap</title>{style}</head><body>'
-    for name, grid in schedules.items():
-        html += grid_to_html(name, grid)
-    html += '</body></html>'
-    with open('overlap_visualizer.html', 'w') as f:
-        f.write(html)
-
-# Example usage
-if __name__ == '__main__':
+def main():
+    st.title('Schedule Overlap Viewer')
     patterns = {
         'RJ': {"timezone": "Asia/Manila", "pattern": "2pm-5pm, 9pm-1am", "days": "M,Tu,W,Th,F"},
         'Kai': {"timezone": "Asia/Manila", "pattern": "12am-5am", "days": "M,Tu,W,Th,F"},
@@ -79,4 +51,23 @@ if __name__ == '__main__':
         'Miko': {"timezone": "Asia/Manila", "pattern": "5am-8am, 6pm-9pm", "days": "M,Tu,W,Th,F"},
     }
     sched_grids = {name: parse_pattern(info['pattern'], info['days']) for name, info in patterns.items()}
-    write_html(sched_grids) 
+    day = st.selectbox('Select day', DAYS)
+    day_idx = DAYS.index(day)
+    hours = [f'{h:02}:00' for h in range(24)]
+    # Build table: rows=hours, cols=people
+    table = []
+    for h in range(24):
+        row = [int(sched_grids[name][day_idx, h]) for name in sched_grids]
+        table.append(row)
+    # Render table with color
+    st.write(f'### {day}')
+    st.write('**Green = Busy**')
+    st.write('')
+    df = pd.DataFrame(table, columns=list(sched_grids.keys()), index=hours)
+    def highlight(val):
+        color = '#7fc97f' if val else ''
+        return f'background-color: {color}'
+    st.dataframe(df.style.applymap(highlight), height=700)
+
+if __name__ == '__main__':
+    main() 
